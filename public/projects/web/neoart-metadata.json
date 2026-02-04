@@ -1,0 +1,16 @@
+{
+  "title": "NeoArt",
+  "category": "web",
+  "description": "neo-art.online",
+  "link": "neo-art.online",
+  "tags": [
+    "React",
+    "Node.js",
+    "Firebase"
+  ],
+  "images": [
+    "/projects/web/neoart-1.png",
+    "/projects/web/neoart-2.png"
+  ],
+  "createdAt": "2026-02-04T22:07:16.793Z"
+}
