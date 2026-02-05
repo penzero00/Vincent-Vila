@@ -32,13 +32,12 @@ import {
 
 // --- Data & Content ---
 
-const API_BASE = import.meta.env.VITE_API_BASE || '';
 const NAV_LINKS = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
   { name: 'Portfolio', href: '#portfolio' },
   { name: 'Resume', href: '#resume' },
-  { name: 'Contact', href: '#contact' }
+  { name: 'Contact', href: '#contact' },
 ];
 
 const CATEGORIES = [
@@ -47,7 +46,7 @@ const CATEGORIES = [
   { id: 'cert', label: 'Certifications', icon: <Award size={16} /> },
   { id: 'traditional', label: 'Traditional Arts', icon: <Brush size={16} /> },
   { id: '3d', label: '3D/Animation', icon: <Box size={16} /> },
-  { id: 'digital', label: 'Digital Art / Graphic Designs', icon: <Layers size={16} /> }
+  { id: 'digital', label: 'Digital Art / Graphic Designs', icon: <Layers size={16} /> },
 ];
 
 const EXPERIENCE = [
@@ -616,7 +615,7 @@ const Contact = () => {
     };
 
     try {
-      const response = await fetch(`${API_BASE}/api/send-email`, {
+      const response = await fetch('http://localhost:5000/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -745,7 +744,8 @@ const UploadSection = ({ onProjectUpload }) => {
   });
   const [uploadMessage, setUploadMessage] = useState('');
   
-  const apiBase = API_BASE;
+  // Hardcoded for preview environment to avoid import.meta issues
+  const apiBase = 'http://localhost:5000';
   
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -982,7 +982,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   
-  const apiBase = API_BASE;
+  // Hardcoded for preview environment to avoid import.meta issues
+  const apiBase = 'http://localhost:5000';
 
   // Fetch projects from public folder on component mount
   useEffect(() => {
