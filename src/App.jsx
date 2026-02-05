@@ -701,6 +701,7 @@ const Contact = () => (
 
 const UploadSection = ({ onProjectUpload }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [thumbnailIndex, setThumbnailIndex] = useState(0);
   const [formData, setFormData] = useState({
     title: '',
     category: 'web',
@@ -709,7 +710,7 @@ const UploadSection = ({ onProjectUpload }) => {
     tags: ''
   });
   const [uploadMessage, setUploadMessage] = useState('');
-  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
   
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -734,6 +735,12 @@ const UploadSection = ({ onProjectUpload }) => {
 
   const removeImage = (index) => {
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    // Adjust thumbnail index if needed
+    setThumbnailIndex(prevThumb => {
+      if (prevThumb === index) return 0; // Reset to first if removed thumbnail
+      if (prevThumb > index) return prevThumb - 1; // Shift down if removed before thumbnail
+      return prevThumb;
+    });
   };
 
   return (
@@ -752,21 +759,33 @@ const UploadSection = ({ onProjectUpload }) => {
               
               {/* Image Upload Area */}
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Project Images {imagePreviews.length > 0 && <span className="text-indigo-400">({imagePreviews.length} {imagePreviews.length === 1 ? 'image' : 'images'}) - First is thumbnail</span>}</label>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Project Images {imagePreviews.length > 0 && <span className="text-indigo-400">({imagePreviews.length} {imagePreviews.length === 1 ? 'image' : 'images'}) - Click to set thumbnail</span>}</label>
                 
                 {/* Image Preview Grid */}
                 {imagePreviews.length > 0 && (
                   <div className="grid grid-cols-3 gap-4 mb-4">
                     {imagePreviews.map((preview, index) => (
-                      <div key={index} className="relative group">
+                      <div 
+                        key={index} 
+                        className={`relative group cursor-pointer transition-all ${
+                          index === thumbnailIndex ? 'ring-2 ring-indigo-500' : 'hover:ring-2 hover:ring-slate-600'
+                        }`}
+                        onClick={() => setThumbnailIndex(index)}
+                      >
                         <img src={preview} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded-lg border-2 border-slate-800" />
-                        {index === 0 && (
-                          <div className="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-2 py-1 rounded">Thumbnail</div>
+                        {index === thumbnailIndex && (
+                          <div className="absolute top-1 left-1 bg-indigo-600 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            Thumbnail
+                          </div>
                         )}
                         <button
                           type="button"
-                          onClick={() => removeImage(index)}
-                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeImage(index);
+                          }}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
                         >
                           ×
                         </button>
@@ -873,9 +892,10 @@ const UploadSection = ({ onProjectUpload }) => {
                   uploadData.append('link', formData.link);
                   uploadData.append('tags', formData.tags);
                   uploadData.append('imageCount', imagePreviews.length);
+                  uploadData.append('thumbnailIndex', thumbnailIndex);
                   
                   // Upload to server
-                  const uploadResponse = await fetch(`${apiBase || ''}/api/upload`, {
+                  const uploadResponse = await fetch(`${apiBase}/api/upload`, {
                     method: 'POST',
                     body: uploadData
                   });
@@ -893,6 +913,7 @@ const UploadSection = ({ onProjectUpload }) => {
                   
                   setUploadMessage(`Project uploaded successfully with ${imagePreviews.length} image(s)!`);
                   setImagePreviews([]);
+                  setThumbnailIndex(0);
                   setFormData({ title: '', category: 'web', description: '', link: '', tags: '' });
                   setTimeout(() => setUploadMessage(''), 3000);
                 } catch (error) {
@@ -923,12 +944,14 @@ export default function App() {
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
-  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+  
+  // Use env var if set, otherwise default to localhost:5000 in dev
+  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
   // Fetch projects from public folder on component mount
   useEffect(() => {
     const fetchProjects = async () => {
-      const apiUrl = apiBase ? `${apiBase}/api/projects` : '/api/projects';
+      const apiUrl = `${apiBase}/api/projects`;
       const fallbackUrl = `${import.meta.env.BASE_URL || '/'}projects/index.json`;
 
       try {
@@ -938,6 +961,7 @@ export default function App() {
         setPortfolioItems(projects);
         return;
       } catch (error) {
+        console.log('API not available, trying static index...');
         try {
           const staticResponse = await fetch(fallbackUrl);
           if (staticResponse.ok) {

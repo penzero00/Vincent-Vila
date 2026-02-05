@@ -39,7 +39,10 @@ const readProjects = () => {
         metadata.category = mappedCategory;
         if (!metadata.id) metadata.id = Date.now() + Math.random();
         if (metadata.images && metadata.images.length > 0) {
-          metadata.image = metadata.images[0];
+          const thumbIndex = typeof metadata.thumbnailIndex === 'number'
+            ? Math.min(metadata.thumbnailIndex, metadata.images.length - 1)
+            : 0;
+          metadata.image = metadata.images[thumbIndex];
         }
 
         projects.push(metadata);

@@ -1,0 +1,18 @@
+{
+  "title": "3D Nescafe Gold",
+  "category": "3d",
+  "description": "A 3D Model of Nescafe Gold",
+  "link": "",
+  "tags": [
+    "3D",
+    "Blender"
+  ],
+  "images": [
+    "/projects/3d/3d-nescafe-gold-1.png",
+    "/projects/3d/3d-nescafe-gold-2.png",
+    "/projects/3d/3d-nescafe-gold-3.png",
+    "/projects/3d/3d-nescafe-gold-4.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:34:49.347Z"
+}

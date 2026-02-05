@@ -1,0 +1,20 @@
+{
+  "title": "Mural Painting",
+  "category": "traditional",
+  "description": "Mural Paintings using Acrylic Paint",
+  "link": "",
+  "tags": [
+    "Acrylic",
+    "Mural Painting"
+  ],
+  "images": [
+    "/projects/traditional/mural-painting-1.png",
+    "/projects/traditional/mural-painting-2.png",
+    "/projects/traditional/mural-painting-3.png",
+    "/projects/traditional/mural-painting-4.png",
+    "/projects/traditional/mural-painting-5.png",
+    "/projects/traditional/mural-painting-6.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:40:28.634Z"
+}

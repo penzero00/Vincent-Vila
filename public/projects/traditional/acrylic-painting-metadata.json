@@ -1,0 +1,18 @@
+{
+  "title": "Acrylic Painting",
+  "category": "traditional",
+  "description": "Acrylic portrait on canvas",
+  "link": "",
+  "tags": [
+    "Acrylic",
+    "Portrait"
+  ],
+  "images": [
+    "/projects/traditional/acrylic-painting-1.png",
+    "/projects/traditional/acrylic-painting-2.png",
+    "/projects/traditional/acrylic-painting-3.png",
+    "/projects/traditional/acrylic-painting-4.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:45:28.755Z"
+}

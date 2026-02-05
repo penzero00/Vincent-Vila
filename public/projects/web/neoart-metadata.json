@@ -1,7 +1,7 @@
 {
   "title": "NeoArt",
   "category": "web",
-  "description": "neo-art.online",
+  "description": "NeoArt is a web-based 2D animation e-learning platform designed to support \r\nbeginner animators, particularly in low-resource environments. The system integrates intuitive drawing tools, frame-by-frame and timeline-based animation modes, and a third-party AI assistant for sketch enhancement and automated coloring suggestions. It also features interactive tutorials, a progress tracker, and a personalized user dashboard to promote structured learning and creative development.",
   "link": "neo-art.online",
   "tags": [
     "React",
@@ -12,5 +12,6 @@
     "/projects/web/neoart-1.png",
     "/projects/web/neoart-2.png"
   ],
-  "createdAt": "2026-02-04T22:07:16.793Z"
+  "createdAt": "2026-02-05T00:46:59.397Z",
+  "thumbnailIndex": 0
 }

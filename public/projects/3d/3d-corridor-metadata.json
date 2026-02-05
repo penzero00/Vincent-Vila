@@ -1,0 +1,21 @@
+{
+  "title": "3D Corridor",
+  "category": "3d",
+  "description": "A 3D modeling project made using Blender",
+  "link": "",
+  "tags": [
+    "3D",
+    "Blender"
+  ],
+  "images": [
+    "/projects/3d/3d-corridor-1.png",
+    "/projects/3d/3d-corridor-2.png",
+    "/projects/3d/3d-corridor-3.png",
+    "/projects/3d/3d-corridor-4.png",
+    "/projects/3d/3d-corridor-5.png",
+    "/projects/3d/3d-corridor-6.png",
+    "/projects/3d/3d-corridor-7.png"
+  ],
+  "thumbnailIndex": 4,
+  "createdAt": "2026-02-05T01:31:59.348Z"
+}

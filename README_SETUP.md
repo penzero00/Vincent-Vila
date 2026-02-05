@@ -44,13 +44,21 @@ npm install
 
 ## Running the Project
 
-### Option 1: Run Frontend Only
+### Recommended: Run Both Frontend & Backend Together
 ```bash
+npm run dev:all
+```
+This starts both servers automatically.
+
+### Option 1: Run Frontend Only (Static Mode)
+```bash
+npm run prebuild    # Generate projects index
 npm run dev
 ```
-Visit: http://localhost:5173
+Visit: http://localhost:5173  
+**Note**: Uploads won't work without backend.
 
-### Option 2: Run Both Frontend & Backend
+### Option 2: Run Both Frontend & Backend Separately
 **Terminal 1 - Frontend:**
 ```bash
 npm run dev
@@ -60,12 +68,8 @@ npm run dev
 ```bash
 npm run server
 ```
-or
-```bash
-node server.js
-```
 
-Frontend: http://localhost:5173
+Frontend: http://localhost:5173  
 Backend API: http://localhost:5000
 
 ## Project Structure

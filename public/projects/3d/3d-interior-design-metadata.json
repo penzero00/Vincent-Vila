@@ -1,0 +1,21 @@
+{
+  "title": "3D Interior Design",
+  "category": "3d",
+  "description": "A 3D interior Design ",
+  "link": "",
+  "tags": [
+    "SketchUp",
+    "3D"
+  ],
+  "images": [
+    "/projects/3d/3d-interior-design-1.png",
+    "/projects/3d/3d-interior-design-2.png",
+    "/projects/3d/3d-interior-design-3.png",
+    "/projects/3d/3d-interior-design-4.png",
+    "/projects/3d/3d-interior-design-5.png",
+    "/projects/3d/3d-interior-design-6.png",
+    "/projects/3d/3d-interior-design-7.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:33:17.804Z"
+}

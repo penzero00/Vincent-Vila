@@ -1,0 +1,17 @@
+{
+  "title": "3D Simulation",
+  "category": "3d",
+  "description": "3D Physics Simulation",
+  "link": "",
+  "tags": [
+    "3D",
+    "Blender"
+  ],
+  "images": [
+    "/projects/3d/3d-simulation-1.png",
+    "/projects/3d/3d-simulation-2.png",
+    "/projects/3d/3d-simulation-3.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:34:09.686Z"
+}

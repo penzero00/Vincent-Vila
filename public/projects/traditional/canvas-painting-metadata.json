@@ -1,0 +1,19 @@
+{
+  "title": "Canvas Painting",
+  "category": "traditional",
+  "description": "Canvas Painting using Acrylic Paint",
+  "link": "",
+  "tags": [
+    "Acrylic",
+    "Canvas Painting"
+  ],
+  "images": [
+    "/projects/traditional/canvas-painting-1.png",
+    "/projects/traditional/canvas-painting-2.png",
+    "/projects/traditional/canvas-painting-3.png",
+    "/projects/traditional/canvas-painting-4.png",
+    "/projects/traditional/canvas-painting-5.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T01:42:15.836Z"
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Coffee Shop 2 - Mockup",
+  "category": "web",
+  "description": "A coffee shop mockup made using react and node.js",
+  "link": "concordian.vercel.app",
+  "tags": [
+    "React",
+    "Node.js"
+  ],
+  "images": [
+    "/projects/web/coffee-shop-2-mockup-1.png",
+    "/projects/web/coffee-shop-2-mockup-2.png",
+    "/projects/web/coffee-shop-2-mockup-3.png",
+    "/projects/web/coffee-shop-2-mockup-4.png",
+    "/projects/web/coffee-shop-2-mockup-5.png"
+  ],
+  "thumbnailIndex": 2,
+  "createdAt": "2026-02-05T01:27:51.619Z"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "SBO Financial Management Portal",
+  "category": "web",
+  "description": "The SBO Financial Management Portal is a web-based platform developed to enhance financial transparency, accountability, and operational efficiency within the College of Computer Studies – Student Body Organization (SBO). The system serves as a centralized platform for managing and monitoring funds, budgets, and financial reports. It allows authorized officers (President, Vice President for Budget and Finance Management, Treasurer, Auditor) and advisers to manage and monitor all financial activities in a secure and structured digital environment.",
+  "link": "sbo-finance-management-portal.42web.io",
+  "tags": [
+    "React",
+    "Node.js",
+    "Supabase"
+  ],
+  "images": [
+    "/projects/web/sbo-financial-management-portal-1.png",
+    "/projects/web/sbo-financial-management-portal-2.png",
+    "/projects/web/sbo-financial-management-portal-3.png",
+    "/projects/web/sbo-financial-management-portal-4.png",
+    "/projects/web/sbo-financial-management-portal-5.png",
+    "/projects/web/sbo-financial-management-portal-6.png",
+    "/projects/web/sbo-financial-management-portal-7.png"
+  ],
+  "thumbnailIndex": 2,
+  "createdAt": "2026-02-05T01:09:33.132Z"
+}

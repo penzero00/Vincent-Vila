@@ -1,0 +1,24 @@
+{
+  "title": "Charcoal Portrait",
+  "category": "traditional",
+  "description": "Charcoal Painting",
+  "link": "",
+  "tags": [
+    "Charcoal",
+    "Portrait"
+  ],
+  "images": [
+    "/projects/traditional/charcoal-portrait-1.png",
+    "/projects/traditional/charcoal-portrait-2.png",
+    "/projects/traditional/charcoal-portrait-3.png",
+    "/projects/traditional/charcoal-portrait-4.png",
+    "/projects/traditional/charcoal-portrait-5.png",
+    "/projects/traditional/charcoal-portrait-6.png",
+    "/projects/traditional/charcoal-portrait-7.png",
+    "/projects/traditional/charcoal-portrait-8.png",
+    "/projects/traditional/charcoal-portrait-9.png",
+    "/projects/traditional/charcoal-portrait-10.png"
+  ],
+  "thumbnailIndex": 4,
+  "createdAt": "2026-02-05T01:44:24.403Z"
+}

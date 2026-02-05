@@ -1,0 +1,20 @@
+{
+  "title": "Roofing Services - Mockup",
+  "category": "web",
+  "description": "A roofing services website mockup made using react and next.js",
+  "link": "conrad-roofing-services.vercel.app",
+  "tags": [
+    "React",
+    "Next.js"
+  ],
+  "images": [
+    "/projects/web/roofing-services-mockup-1.png",
+    "/projects/web/roofing-services-mockup-2.png",
+    "/projects/web/roofing-services-mockup-3.png",
+    "/projects/web/roofing-services-mockup-4.png",
+    "/projects/web/roofing-services-mockup-5.png",
+    "/projects/web/roofing-services-mockup-6.png"
+  ],
+  "thumbnailIndex": 5,
+  "createdAt": "2026-02-05T01:29:58.738Z"
+}

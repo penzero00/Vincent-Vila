@@ -1,0 +1,77 @@
+[
+  {
+    "title": "IT Specialist - Software Development (LE9P-s4NX)",
+    "category": "cert",
+    "description": "Validated proficiency in core software development concepts,\r\nincluding object-oriented programming, data structures, and algorithm\r\nlogic.",
+    "link": "verify.certiport.com",
+    "tags": [
+      "Certification"
+    ],
+    "images": [
+      "/projects/cert/it-specialist-software-development-le9p-s4nx-.png"
+    ],
+    "createdAt": "2026-02-05T00:16:47.785Z",
+    "id": 1770253374592.714,
+    "image": "/projects/cert/it-specialist-software-development-le9p-s4nx-.png"
+  },
+  {
+    "title": "Coffee Shop Website - Mockup",
+    "category": "web",
+    "description": "Coffee shop mockup using React and Next.js",
+    "link": "naz-coffee.vercel.app",
+    "tags": [
+      "React",
+      "Next.js"
+    ],
+    "images": [
+      "/projects/web/coffee-shop-website-mockup-1.png",
+      "/projects/web/coffee-shop-website-mockup-2.png",
+      "/projects/web/coffee-shop-website-mockup-3.png",
+      "/projects/web/coffee-shop-website-mockup-4.png"
+    ],
+    "createdAt": "2026-02-05T01:00:49.360Z",
+    "id": 1770253374601.804,
+    "image": "/projects/web/coffee-shop-website-mockup-1.png"
+  },
+  {
+    "title": "NeoArt",
+    "category": "web",
+    "description": "NeoArt is a web-based 2D animation e-learning platform designed to support \r\nbeginner animators, particularly in low-resource environments. The system integrates intuitive drawing tools, frame-by-frame and timeline-based animation modes, and a third-party AI assistant for sketch enhancement and automated coloring suggestions. It also features interactive tutorials, a progress tracker, and a personalized user dashboard to promote structured learning and creative development.",
+    "link": "neo-art.online",
+    "tags": [
+      "React",
+      "Node.js",
+      "Firebase"
+    ],
+    "images": [
+      "/projects/web/neoart-1.png",
+      "/projects/web/neoart-2.png"
+    ],
+    "createdAt": "2026-02-05T00:46:59.397Z",
+    "id": 1770253374602.7375,
+    "image": "/projects/web/neoart-1.png"
+  },
+  {
+    "title": "SBO Financial Management Portal",
+    "category": "web",
+    "description": "The SBO Financial Management Portal is a web-based platform developed to enhance financial transparency, accountability, and operational efficiency within the College of Computer Studies – Student Body Organization (SBO). The system serves as a centralized platform for managing and monitoring funds, budgets, and financial reports. It allows authorized officers (President, Vice President for Budget and Finance Management, Treasurer, Auditor) and advisers to manage and monitor all financial activities in a secure and structured digital environment.",
+    "link": "sbo-finance-management-portal.42web.io",
+    "tags": [
+      "React",
+      "Node.js",
+      "Supabase"
+    ],
+    "images": [
+      "/projects/web/sbo-financial-management-portal-1.png",
+      "/projects/web/sbo-financial-management-portal-2.png",
+      "/projects/web/sbo-financial-management-portal-3.png",
+      "/projects/web/sbo-financial-management-portal-4.png",
+      "/projects/web/sbo-financial-management-portal-5.png",
+      "/projects/web/sbo-financial-management-portal-6.png",
+      "/projects/web/sbo-financial-management-portal-7.png"
+    ],
+    "createdAt": "2026-02-05T00:57:13.128Z",
+    "id": 1770253374602.3088,
+    "image": "/projects/web/sbo-financial-management-portal-1.png"
+  }
+]

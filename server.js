@@ -61,6 +61,7 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
     // Get category and title from request body
     const category = req.body.category || 'other';
     const title = req.body.title || 'untitled';
+    const thumbnailIndex = req.body.thumbnailIndex !== undefined ? parseInt(req.body.thumbnailIndex, 10) : 0;
     
     // Sanitize title for filename
     const sanitizedTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
@@ -98,18 +99,22 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
       link: req.body.link || '',
       tags: req.body.tags ? req.body.tags.split(',').map(t => t.trim()) : [],
       images: imageUrls,
+      thumbnailIndex: Math.min(thumbnailIndex, imageUrls.length - 1), // Ensure valid index
       createdAt: new Date().toISOString()
     };
     
     const metadataPath = path.join(categoryDir, `${sanitizedTitle}-metadata.json`);
     fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
     
-    // Return complete project data with first image as thumbnail
+    // Return complete project data with selected image as thumbnail
+    const selectedThumbnailIndex = Math.min(thumbnailIndex, imageUrls.length - 1);
     const projectData = {
       id: Date.now(),
       ...metadata,
-      image: imageUrls[0] // First image is the thumbnail
+      image: imageUrls[selectedThumbnailIndex] // Use selected thumbnail
     };
+    
+    console.log(`✓ Uploaded "${metadata.title}" with thumbnail at index ${selectedThumbnailIndex}: ${projectData.image}`);
     
     res.json({
       success: true,
@@ -150,9 +155,12 @@ app.get('/api/projects', (req, res) => {
             metadata.id = Date.now() + Math.random();
           }
           
-          // Set main image (first image as thumbnail)
+          // Set main image using thumbnailIndex if present, otherwise first image
           if (metadata.images && metadata.images.length > 0) {
-            metadata.image = metadata.images[0];
+            const thumbIndex = typeof metadata.thumbnailIndex === 'number' 
+              ? Math.min(metadata.thumbnailIndex, metadata.images.length - 1)
+              : 0;
+            metadata.image = metadata.images[thumbIndex];
           }
           
           projects.push(metadata);
