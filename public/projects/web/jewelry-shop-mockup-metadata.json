@@ -1,0 +1,21 @@
+{
+  "title": "Jewelry Shop - Mockup",
+  "category": "web",
+  "description": "A mockup of jewelry shop made using react.",
+  "link": "ylegante.vercel.app",
+  "tags": [
+    "React",
+    "Node.js",
+    "Jewelry"
+  ],
+  "images": [
+    "/projects/web/jewelry-shop-mockup-1.png",
+    "/projects/web/jewelry-shop-mockup-2.png",
+    "/projects/web/jewelry-shop-mockup-3.png",
+    "/projects/web/jewelry-shop-mockup-4.png",
+    "/projects/web/jewelry-shop-mockup-5.png",
+    "/projects/web/jewelry-shop-mockup-6.png"
+  ],
+  "thumbnailIndex": 5,
+  "createdAt": "2026-02-05T12:32:52.873Z"
+}

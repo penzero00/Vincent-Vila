@@ -49,8 +49,6 @@ const CATEGORIES = [
   { id: 'digital', label: 'Digital Art / Graphic Designs', icon: <Layers size={16} /> },
 ];
 
-const INITIAL_PORTFOLIO_ITEMS = [];
-
 const EXPERIENCE = [
   {
     id: 1,
@@ -248,172 +246,163 @@ const About = () => (
   </section>
 );
 
-const Portfolio = ({ portfolioItems = [] }) => {
+const ImageViewer = ({ project, onClose }) => {
+  if (!project) return null;
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const images = project.images && project.images.length > 0 ? project.images : [project.image];
+  
+  // Lock scroll when modal opens
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
+  
+  const nextImage = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+  
+  const prevImage = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 z-[1000] backdrop-blur-xl bg-slate-950/95 flex items-center justify-center p-4 md:p-12 animate-in fade-in duration-200"
+      onClick={onClose}
+    >
+      {/* Main Container */}
+      <div className="w-full max-w-7xl max-h-[90vh] flex gap-0 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl flex-col md:flex-row" onClick={(e) => e.stopPropagation()}>
+          
+          {/* Image Section - Left Side */}
+          <div className="flex-1 relative bg-slate-900 flex items-center justify-center min-h-[300px]">
+            
+            {/* Previous Button */}
+            {images.length > 1 && (
+              <button
+                onClick={prevImage}
+                className="absolute left-6 p-4 bg-slate-950/80 hover:bg-slate-900 rounded-full transition-all text-white z-10 border border-slate-700 hover:scale-110"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+            )}
+
+            {/* Image Display */}
+            <div className="w-full h-full flex items-center justify-center overflow-hidden p-8">
+              <img 
+                src={images[currentIndex]} 
+                alt={`${project.title} ${currentIndex + 1}`} 
+                className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+              />
+            </div>
+
+            {/* Next Button */}
+            {images.length > 1 && (
+              <button
+                onClick={nextImage}
+                className="absolute right-6 p-4 bg-slate-950/80 hover:bg-slate-900 rounded-full transition-all text-white z-10 border border-slate-700 hover:scale-110"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            )}
+
+            {/* Slide Dots */}
+            {images.length > 1 && (
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentIndex 
+                        ? 'bg-indigo-500 w-8' 
+                        : 'bg-slate-600 hover:bg-slate-500'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Info Panel - Right Side */}
+          <div className="w-full md:w-[400px] bg-slate-950 flex flex-col p-8 border-l border-slate-800 overflow-y-auto">
+            
+            {/* Category Badge */}
+            <div className="mb-6">
+              <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                {CATEGORIES.find(c => c.id === project.category)?.label}
+              </span>
+            </div>
+
+            {/* Project Title */}
+            <h2 className="text-3xl font-bold text-white mb-6 leading-tight">
+              {project.title}
+            </h2>
+
+            {/* Description */}
+            {project.description && (
+              <div className="mb-6">
+                <p className="text-slate-400 leading-relaxed">
+                  {project.description}
+                </p>
+              </div>
+            )}
+
+            {/* Tags Section */}
+            {project.tags && project.tags.length > 0 && (
+              <div className="mb-8">
+                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
+                  Tags
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map(tag => (
+                    <span 
+                      key={tag} 
+                      className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 text-sm font-medium hover:border-indigo-500/50 transition-colors"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Spacer */}
+            <div className="flex-1 min-h-[20px]"></div>
+
+            {/* View Live Project Button */}
+            {project.link && (
+              <a
+                href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30"
+              >
+                <ExternalLink size={20} />
+                View Live Project
+              </a>
+            )}
+          </div>
+        </div>
+    </div>
+  );
+};
+
+const Portfolio = ({ portfolioItems = [], onSelectProject }) => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
 
   const filteredItems = activeFilter === 'all' 
     ? portfolioItems 
     : portfolioItems.filter(item => item.category === activeFilter);
-
-  // Image Viewer Component
-  const ImageViewer = ({ project, onClose }) => {
-    if (!project) return null;
-    
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const images = project.images && project.images.length > 0 ? project.images : [project.image];
-    
-    // Lock scroll position when modal opens
-    useEffect(() => {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-      
-      return () => {
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
-        window.scrollTo(0, scrollY);
-      };
-    }, []);
-    
-    const nextImage = () => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    };
-    
-    const prevImage = () => {
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-    };
-
-    return (
-      <div 
-        className="fixed inset-0 z-[60] backdrop-blur-xl bg-slate-950/95 flex items-center justify-center p-4 md:p-12 animate-in fade-in duration-200"
-        onClick={onClose}
-      >
-        {/* Main Container */}
-        <div className="w-full max-w-7xl h-[85vh] flex gap-0 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800" onClick={(e) => e.stopPropagation()}>
-            
-            {/* Image Section - Left Side */}
-            <div className="flex-1 relative bg-slate-900 flex items-center justify-center">
-              
-              {/* Previous Button */}
-              {images.length > 1 && (
-                <button
-                  onClick={prevImage}
-                  className="absolute left-6 p-4 bg-slate-950/80 hover:bg-slate-900 rounded-full transition-all text-white z-10 border border-slate-700 hover:scale-110"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                  </svg>
-                </button>
-              )}
-
-              {/* Image Display */}
-              <div className="w-full h-full flex items-center justify-center overflow-hidden p-8">
-                <img 
-                  src={images[currentIndex]} 
-                  alt={`${project.title} ${currentIndex + 1}`} 
-                  className="max-w-full max-h-full object-contain rounded-lg"
-                />
-              </div>
-
-              {/* Next Button */}
-              {images.length > 1 && (
-                <button
-                  onClick={nextImage}
-                  className="absolute right-6 p-4 bg-slate-950/80 hover:bg-slate-900 rounded-full transition-all text-white z-10 border border-slate-700 hover:scale-110"
-                >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                  </svg>
-                </button>
-              )}
-
-              {/* Slide Dots */}
-              {images.length > 1 && (
-                <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
-                  {images.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        index === currentIndex 
-                          ? 'bg-indigo-500 w-8' 
-                          : 'bg-slate-600 hover:bg-slate-500'
-                      }`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Info Panel - Right Side */}
-            <div className="w-full md:w-[400px] bg-slate-950 flex flex-col p-8 border-l border-slate-800">
-              
-              {/* Category Badge */}
-              <div className="mb-6">
-                <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">
-                  {CATEGORIES.find(c => c.id === project.category)?.label}
-                </span>
-              </div>
-
-              {/* Project Title */}
-              <h2 className="text-3xl font-bold text-white mb-6 leading-tight">
-                {project.title}
-              </h2>
-
-              {/* Description */}
-              {project.description && (
-                <div className="mb-6">
-                  <p className="text-slate-400 leading-relaxed">
-                    {project.description}
-                  </p>
-                </div>
-              )}
-
-              {/* Tags Section */}
-              {project.tags && project.tags.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-                    Tags
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map(tag => (
-                      <span 
-                        key={tag} 
-                        className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-300 text-sm font-medium hover:border-indigo-500/50 transition-colors"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Spacer */}
-              <div className="flex-1"></div>
-
-              {/* View Live Project Button */}
-              {project.link && (
-                <a
-                  href={project.link.startsWith('http') ? project.link : `https://${project.link}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30"
-                >
-                  <ExternalLink size={20} />
-                  View Live Project
-                </a>
-              )}
-            </div>
-          </div>
-      </div>
-    );
-  };
 
   return (
     <section id="portfolio" className="py-24 bg-slate-900">
@@ -451,7 +440,7 @@ const Portfolio = ({ portfolioItems = [] }) => {
               className="group relative bg-slate-950 rounded-xl overflow-hidden border border-slate-800 hover:border-indigo-500/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 cursor-pointer"
               onMouseEnter={() => setHoveredItem(item.id)}
               onMouseLeave={() => setHoveredItem(null)}
-              onClick={() => setSelectedProject(item)}
+              onClick={() => onSelectProject(item)}
             >
               {/* Image Container */}
               <div className="aspect-[4/3] overflow-hidden relative">
@@ -462,10 +451,10 @@ const Portfolio = ({ portfolioItems = [] }) => {
                 />
                 {/* Overlay */}
                 <div className={`absolute inset-0 bg-slate-900/80 flex flex-col items-center justify-center p-6 text-center transition-opacity duration-300 ${hoveredItem === item.id ? 'opacity-100' : 'opacity-0'}`}>
-                   <p className="text-slate-300 text-sm mb-4">Click to view details</p>
-                   <button className="p-3 bg-white text-slate-900 rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                     <ExternalLink size={20} />
-                   </button>
+                    <p className="text-slate-300 text-sm mb-4">Click to view details</p>
+                    <button className="p-3 bg-white text-slate-900 rounded-full hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                      <ExternalLink size={20} />
+                    </button>
                 </div>
               </div>
 
@@ -490,14 +479,6 @@ const Portfolio = ({ portfolioItems = [] }) => {
             </div>
           ))}
         </div>
-
-        {/* Image Viewer */}
-        {selectedProject && (
-          <ImageViewer 
-            project={selectedProject} 
-            onClose={() => setSelectedProject(null)} 
-          />
-        )}
       </div>
     </section>
   );
@@ -618,7 +599,49 @@ const Resume = () => (
   </section>
 );
 
-const Contact = () => (
+const Contact = () => {
+  const [formStatus, setFormStatus] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setFormStatus('');
+
+    const formData = {
+      name: e.target.elements.name.value,
+      email: e.target.elements.email.value,
+      message: e.target.elements.message.value,
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setFormStatus('success');
+        e.target.reset();
+        setTimeout(() => setFormStatus(''), 5000);
+      } else {
+        setFormStatus('error');
+        console.error('Error:', data.error);
+      }
+    } catch (error) {
+      setFormStatus('error');
+      console.error('Error sending email:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
   <section id="contact" className="py-24 bg-slate-950 border-t border-slate-900">
     <div className="container mx-auto px-6">
       <div className="max-w-4xl mx-auto bg-gradient-to-br from-indigo-900/20 to-slate-900 rounded-3xl p-8 md:p-12 border border-slate-800 relative overflow-hidden">
@@ -668,15 +691,7 @@ const Contact = () => (
             </div>
           </div>
 
-          <form className="space-y-4" onSubmit={(e) => {
-            e.preventDefault();
-            const name = e.target.elements.name.value;
-            const email = e.target.elements.email.value;
-            const message = e.target.elements.message.value;
-            const subject = `Portfolio Inquiry from ${name}`;
-            const body = `Name: ${name}%0DEmail: ${email}%0D%0DMessage:%0D${message}`;
-            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=vincent.vila00@gmail.com&su=${encodeURIComponent(subject)}&body=${body}`, '_blank');
-          }}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Name</label>
               <input type="text" name="name" required className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" placeholder="John Doe" />
@@ -689,15 +704,33 @@ const Contact = () => (
               <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Message</label>
               <textarea name="message" rows="4" required className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" placeholder="Tell me about your project..."></textarea>
             </div>
-            <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-all shadow-lg shadow-indigo-500/20">
-              Send Message
+
+            {/* Status Messages */}
+            {formStatus === 'success' && (
+              <div className="bg-green-500/20 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg text-sm">
+                ✓ Message sent successfully! I'll get back to you soon.
+              </div>
+            )}
+            {formStatus === 'error' && (
+              <div className="bg-red-500/20 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
+                ✗ Failed to send message. Please try again or email me directly.
+              </div>
+            )}
+
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-all shadow-lg shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </button>
           </form>
         </div>
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const UploadSection = ({ onProjectUpload }) => {
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -710,7 +743,9 @@ const UploadSection = ({ onProjectUpload }) => {
     tags: ''
   });
   const [uploadMessage, setUploadMessage] = useState('');
-  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  
+  // Hardcoded for preview environment to avoid import.meta issues
+  const apiBase = 'http://localhost:5000';
   
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -863,6 +898,7 @@ const UploadSection = ({ onProjectUpload }) => {
                 <input type="text" value={formData.tags} onChange={(e) => setFormData({...formData, tags: e.target.value})} className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all" placeholder="React, Blender, Design (comma separated)" required />
               </div>
 
+              {/* Upload Handler */}
               {uploadMessage && (
                 <div className={`p-4 rounded-lg text-center ${uploadMessage.includes('successfully') ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                   {uploadMessage}
@@ -942,17 +978,20 @@ const Footer = () => (
 
 export default function App() {
   const [portfolioItems, setPortfolioItems] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
   
-  // Use env var if set, otherwise default to localhost:5000 in dev
-  const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  // Hardcoded for preview environment to avoid import.meta issues
+  const apiBase = 'http://localhost:5000';
 
   // Fetch projects from public folder on component mount
   useEffect(() => {
     const fetchProjects = async () => {
       const apiUrl = `${apiBase}/api/projects`;
-      const fallbackUrl = `${import.meta.env.BASE_URL || '/'}projects/index.json`;
+      // Hardcoded base URL
+      const baseUrl = '/';
+      const fallbackUrl = `${baseUrl}projects/index.json`;
 
       try {
         const response = await fetch(apiUrl);
@@ -1006,11 +1045,22 @@ export default function App() {
       <Navigation />
       <Hero />
       <About />
-      <Portfolio portfolioItems={portfolioItems} />
+      <Portfolio 
+        portfolioItems={portfolioItems} 
+        onSelectProject={setSelectedProject} 
+      />
       <Resume />
       <Contact />
       {showUpload && <UploadSection onProjectUpload={handleProjectUpload} />}
       <Footer />
+      
+      {/* Image Viewer Moved to Root Level */}
+      {selectedProject && (
+        <ImageViewer 
+          project={selectedProject} 
+          onClose={() => setSelectedProject(null)} 
+        />
+      )}
     </div>
   );
 }

@@ -4,12 +4,20 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
+import { Resend } from 'resend';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 5000;
+
+// Initialize Resend with API Key from environment variable
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Middleware
 app.use(cors());
@@ -209,6 +217,43 @@ app.get('/api/projects', (req, res) => {
   });
   
   res.json(projects);
+});
+
+// Email endpoint using Resend
+app.post('/api/send-email', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  // Validate input
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: [process.env.RECEIVER_EMAIL],
+      reply_to: email,
+      subject: `Portfolio Inquiry from ${name}`,
+      html: `
+        <h2>New Portfolio Contact Form Submission</h2>
+        <p><strong>From:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      `,
+    });
+
+    if (error) {
+      console.error('Resend error:', error);
+      return res.status(400).json({ error: error.message });
+    }
+
+    console.log('✓ Email sent successfully:', data);
+    res.json({ success: true, message: 'Email sent successfully!' });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Failed to send email' });
+  }
 });
 
 app.listen(PORT, () => {

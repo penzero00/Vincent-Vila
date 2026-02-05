@@ -1,0 +1,18 @@
+{
+  "title": "Industrial Supplier - Mockup",
+  "category": "web",
+  "description": "A mockup of an industrial supplier made with React and Node.js.",
+  "link": "quadrant-star.vercel.app",
+  "tags": [
+    "React",
+    "Node.js"
+  ],
+  "images": [
+    "/projects/web/industrial-supplier-mockup-1.png",
+    "/projects/web/industrial-supplier-mockup-2.png",
+    "/projects/web/industrial-supplier-mockup-3.png",
+    "/projects/web/industrial-supplier-mockup-4.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-05T12:34:31.996Z"
+}
