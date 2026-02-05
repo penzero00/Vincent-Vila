@@ -1,8 +1,4 @@
-import Busboy from 'busboy';
 import path from 'path';
-
-const MAX_FILES = 10;
-const MAX_FILE_SIZE = 100 * 1024 * 1024;
 
 const getRequiredEnv = (name) => {
   const value = process.env[name];
@@ -18,39 +14,104 @@ const sanitizeTitle = (title) => title
   .replace(/-+/g, '-')
   .replace(/^-|-$/g, '');
 
+const parseBoundary = (contentType) => {
+  const match = contentType?.match(/boundary=([^;\s]+)/);
+  return match ? match[1] : null;
+};
+
 const parseMultipart = (req) => new Promise((resolve, reject) => {
-  const busboy = new Busboy({
-    headers: req.headers,
-    limits: { files: MAX_FILES, fileSize: MAX_FILE_SIZE }
-  });
+  const contentType = req.headers['content-type'];
+  const boundary = parseBoundary(contentType);
+
+  if (!boundary) {
+    reject(new Error('Missing boundary in multipart form data'));
+    return;
+  }
 
   const fields = {};
   const files = [];
+  let buffer = Buffer.alloc(0);
+  let currentPart = null;
+  let currentHeaders = {};
 
-  busboy.on('field', (name, value) => {
-    fields[name] = value;
+  const boundaryBuffer = Buffer.from(`--${boundary}`);
+  const endBoundaryBuffer = Buffer.from(`--${boundary}--`);
+
+  const processPart = () => {
+    if (!currentPart) return;
+
+    const contentDisposition = currentHeaders['content-disposition'] || '';
+    const nameMatch = contentDisposition.match(/name="([^"]+)"/);
+    const filenameMatch = contentDisposition.match(/filename="([^"]+)"/);
+    const name = nameMatch ? nameMatch[1] : null;
+
+    if (filenameMatch && name) {
+      const filename = filenameMatch[1];
+      const mimeType = currentHeaders['content-type'] || 'application/octet-stream';
+      files.push({ fieldName: name, filename, mimeType, buffer: currentPart });
+    } else if (name) {
+      fields[name] = currentPart.toString('utf-8');
+    }
+
+    currentPart = null;
+    currentHeaders = {};
+  };
+
+  req.on('data', (chunk) => {
+    buffer = Buffer.concat([buffer, chunk]);
+
+    let boundaryIndex = buffer.indexOf(boundaryBuffer);
+    while (boundaryIndex !== -1) {
+      if (currentPart !== null) {
+        const partData = buffer.slice(0, boundaryIndex);
+        currentPart = Buffer.concat([currentPart, partData]);
+        processPart();
+      }
+
+      buffer = buffer.slice(boundaryIndex + boundaryBuffer.length);
+
+      if (buffer.toString('utf-8', 0, 2) === '--') {
+        buffer = Buffer.alloc(0);
+        break;
+      }
+
+      if (buffer[0] === 0x0d && buffer[1] === 0x0a) {
+        buffer = buffer.slice(2);
+
+        let headerEnd = buffer.indexOf(Buffer.from('\r\n\r\n'));
+        if (headerEnd === -1) {
+          boundaryIndex = -1;
+          break;
+        }
+
+        const headerData = buffer.slice(0, headerEnd).toString('utf-8');
+        const headers = {};
+        headerData.split('\r\n').forEach((line) => {
+          const colonIndex = line.indexOf(':');
+          if (colonIndex > -1) {
+            const key = line.slice(0, colonIndex).trim().toLowerCase();
+            const value = line.slice(colonIndex + 1).trim();
+            headers[key] = value;
+          }
+        });
+
+        currentHeaders = headers;
+        currentPart = Buffer.alloc(0);
+        buffer = buffer.slice(headerEnd + 4);
+      }
+
+      boundaryIndex = buffer.indexOf(boundaryBuffer);
+    }
   });
 
-  busboy.on('file', (name, file, info) => {
-    const { filename, mimeType } = info;
-    const chunks = [];
-
-    file.on('data', (data) => chunks.push(data));
-    file.on('limit', () => reject(new Error('File size limit exceeded')));
-    file.on('end', () => {
-      files.push({
-        fieldName: name,
-        filename,
-        mimeType,
-        buffer: Buffer.concat(chunks)
-      });
-    });
+  req.on('end', () => {
+    if (currentPart !== null) {
+      processPart();
+    }
+    resolve({ fields, files });
   });
 
-  busboy.on('error', reject);
-  busboy.on('finish', () => resolve({ fields, files }));
-
-  req.pipe(busboy);
+  req.on('error', reject);
 });
 
 const encodeGitHubPath = (filePath) => filePath
