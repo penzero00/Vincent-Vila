@@ -709,6 +709,7 @@ const UploadSection = ({ onProjectUpload }) => {
     tags: ''
   });
   const [uploadMessage, setUploadMessage] = useState('');
+  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
   
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -874,7 +875,7 @@ const UploadSection = ({ onProjectUpload }) => {
                   uploadData.append('imageCount', imagePreviews.length);
                   
                   // Upload to server
-                  const uploadResponse = await fetch('http://localhost:5000/api/upload', {
+                  const uploadResponse = await fetch(`${apiBase || ''}/api/upload`, {
                     method: 'POST',
                     body: uploadData
                   });
@@ -922,18 +923,32 @@ export default function App() {
   const [portfolioItems, setPortfolioItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showUpload, setShowUpload] = useState(false);
+  const apiBase = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
   // Fetch projects from public folder on component mount
   useEffect(() => {
     const fetchProjects = async () => {
+      const apiUrl = apiBase ? `${apiBase}/api/projects` : '/api/projects';
+      const fallbackUrl = `${import.meta.env.BASE_URL || '/'}projects/index.json`;
+
       try {
-        const response = await fetch('http://localhost:5000/api/projects');
-        if (response.ok) {
-          const projects = await response.json();
-          setPortfolioItems(projects);
-        }
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('API unavailable');
+        const projects = await response.json();
+        setPortfolioItems(projects);
+        return;
       } catch (error) {
-        console.error('Failed to fetch projects:', error);
+        try {
+          const staticResponse = await fetch(fallbackUrl);
+          if (staticResponse.ok) {
+            const projects = await staticResponse.json();
+            setPortfolioItems(projects);
+            return;
+          }
+          console.error('Failed to fetch static projects:', staticResponse.status);
+        } catch (staticError) {
+          console.error('Failed to fetch projects:', staticError);
+        }
       } finally {
         setLoading(false);
       }
