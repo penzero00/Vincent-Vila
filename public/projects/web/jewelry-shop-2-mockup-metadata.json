@@ -1,0 +1,21 @@
+{
+  "title": "Jewelry Shop 2 - Mockup",
+  "category": "web",
+  "description": "A mockup of jewelry shop made using react.",
+  "link": "https://ln-wedding-ring.vercel.app/",
+  "tags": [
+    "React",
+    "Node.js",
+    "Resend"
+  ],
+  "images": [
+    "/projects/web/jewelry-shop-2-mockup-1.png",
+    "/projects/web/jewelry-shop-2-mockup-2.png",
+    "/projects/web/jewelry-shop-2-mockup-3.png",
+    "/projects/web/jewelry-shop-2-mockup-4.png",
+    "/projects/web/jewelry-shop-2-mockup-5.png",
+    "/projects/web/jewelry-shop-2-mockup-6.png"
+  ],
+  "thumbnailIndex": 0,
+  "createdAt": "2026-02-06T06:40:17.350Z"
+}
